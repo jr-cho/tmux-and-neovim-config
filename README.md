@@ -1,201 +1,95 @@
-# Minimal Tmux Configuration
+# Tmux and Neovim Configuration
 
-A clean, efficient tmux setup focused on productivity with popup scripts and beautiful catppuccin theming.
+A clean, efficient setup for Tmux and Neovim focused on productivity and a beautiful, consistent theme. This repository provides a minimal yet powerful configuration for a terminal-based workflow.
 
-## Features
+---
 
-- **Catppuccin Mocha theme** with rounded window tabs
-- **Popup scripts** for common workflows (lazygit, session management, terminal)
-- **Vim-style navigation** for panes
-- **Mouse support** enabled
-- **Status bar at top** with session info
-- **Windows/panes start at 1** (not 0)
+## Tmux Configuration
 
-## Prerequisites
+This Tmux configuration is designed for a streamlined workflow with an emphasis on Vim-style keybindings and useful popup scripts.
 
-- **tmux 3.2+** (required for catppuccin theme)
-- **lazygit** (for git popup)
-- **fzf** (for session switcher)
-- **Nerd Font** (for proper icon display)
+### Features
 
-### Install Prerequisites (Arch Linux)
+* **Custom Prefix:** `Ctrl-Space` is used as the prefix key instead of the default `Ctrl-b`.
+* **Popup Scripts:** Access common tools like `lazygit`, an interactive session switcher using `fzf`, and a new session creator directly from popups.
+* **Vim-style Navigation:** Panes can be navigated using `h`, `j`, `k`, and `l` keys.
+* **Mouse Support:** Mouse support is enabled for easy pane resizing and switching.
+* **Status Bar:** The status bar is moved to the top and displays session information.
+* **Catppuccin Mocha Theme:** A beautiful, dark theme is applied to provide a consistent look across sessions.
+* **Start Index:** Windows and panes are renumbered to start at 1 instead of 0.
 
-```bash
-# Install dependencies
-sudo pacman -S tmux lazygit fzf
+### Prerequisites
 
-# Install a Nerd Font (choose one)
-sudo pacman -S ttf-jetbrains-mono-nerd
-sudo pacman -S ttf-firacode-nerd
-```
+* **tmux 3.2+**
+* **lazygit** (for the git popup)
+* **fzf** (for the session switcher)
+* **A Nerd Font** (for proper icon display)
+
+### Key Bindings
+
+* **Prefix Key:** `Ctrl-Space`
+* **Reload Config:** `Prefix + r`
+* **Rename Window:** `Prefix + Ctrl-r`
+* **Kill Sessions:** `Prefix + Ctrl-q` kills all other sessions.
+* **Pane Navigation:** `Prefix + h/j/k/l`
+* **Split Panes:**
+    * `Prefix + |` (horizontal)
+    * `Prefix + -` (vertical)
+* **Popup Scripts:**
+    * `Prefix + Ctrl-y`: **Lazygit** popup
+    * `Prefix + Ctrl-t`: **Terminal** popup
+    * `Prefix + Ctrl-n`: **New session** creator
+    * `Prefix + Ctrl-j`: **Session switcher**
+* **Copy Mode:**
+    * `Prefix + Enter`: Enter copy mode
+    * `v`: Begin selection
+    * `y`: Copy selection
+    * `Prefix + p`: Paste
+
+---
+
+## Neovim Configuration
+
+This Neovim setup is configured in Lua, with a focus on a fast startup using `lazy.nvim` and provides a comprehensive suite of plugins for a modern development environment.
+
+### Features
+
+* **Core Settings:** Includes settings for line numbers (`number`, `relativenumber`), tabs, indents, and a clean UI.
+* **Lazy Loading:** Uses the `lazy.nvim` plugin manager to ensure a fast startup.
+* **LSP and Autocompletion:** Integrates `nvim-lspconfig`, `mason.nvim`, and `nvim-cmp` for language support, code completion, and snippets. The configuration is set up for `clangd`, `rust_analyzer`, `gopls`, and `lua_ls`.
+* **Treesitter:** Provides advanced syntax highlighting and indentation.
+* **Telescope:** The `telescope.nvim` plugin is configured for fuzzy-finding files and searching with keybindings like `<leader>ff` and `<leader>fg`.
+* **Auto-Formatting:** Uses `conform.nvim` to automatically format code on save.
+* **Catppuccin Mocha Theme:** The editor theme is set to match the Tmux theme for a consistent look and feel.
+* **Keymaps:** Includes custom keymaps for fast escapes (`jk`), buffer navigation (`Shift + h/l`), and a visual indent/outdent (`<`/`>`).
+
+### Key Bindings
+
+* **Leader Key:** `Space`
+* **Navigation:**
+    * `Shift + h`: Previous buffer
+    * `Shift + l`: Next buffer
+* **Find/Search:**
+    * `<leader>ff`: Find files
+    * `<leader>fg`: Live grep
+    * `<leader>fb`: Find buffers
+* **LSP:**
+    * `gd`: Go to definition
+    * `gr`: Go to references
+    * `K`: Hover information
+    * `<leader>ca`: Code action
+    * `<leader>rn`: Rename
+* **Formatting:**
+    * `<leader>f`: Format file
+
+---
 
 ## Installation
 
-### 1. Backup existing config (if any)
-```bash
-cp ~/.tmux.conf ~/.tmux.conf.backup
-```
-
-### 2. Install fresh TPM and catppuccin
-```bash
-# Remove old plugins
-rm -rf ~/.tmux/plugins
-
-# Install TPM
-git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
-
-# Install catppuccin directly
-mkdir -p ~/.config/tmux/plugins
-git clone https://github.com/catppuccin/tmux.git ~/.config/tmux/plugins/catppuccin
-```
-
-### 3. Copy configuration
-Copy the tmux configuration to `~/.tmux.conf`
-
-### 4. Load configuration
-```bash
-# Start tmux
-tmux
-
-# Install TPM plugins (inside tmux)
-Ctrl-Space + I
-
-# Reload config
-tmux source ~/.tmux.conf
-```
-
-## Key Bindings
-
-### Prefix Key
-- **Prefix:** `Ctrl-Space` (instead of default Ctrl-b)
-
-### Basic Commands
-| Key | Action |
-|-----|--------|
-| `Prefix + r` | Reload config |
-| `Prefix + C-r` | Rename window |
-| `Prefix + C-q` | Kill all other sessions |
-
-### Pane Navigation
-| Key | Action |
-|-----|--------|
-| `Prefix + h/j/k/l` | Move between panes (vim-style) |
-
-### Window Navigation
-| Key | Action |
-|-----|--------|
-| `Shift + Left/Right` | Switch between windows |
-
-### Pane Splitting
-| Key | Action |
-|-----|--------|
-| `Prefix + \|` | Split horizontal |
-| `Prefix + \\` | Split horizontal (full width) |
-| `Prefix + -` | Split vertical |
-| `Prefix + _` | Split vertical (full height) |
-
-### Popup Scripts
-| Key | Action |
-|-----|--------|
-| `Prefix + Ctrl-y` | **Lazygit** popup (80% screen) |
-| `Prefix + Ctrl-t` | **Terminal** popup (75% screen) |
-| `Prefix + Ctrl-n` | **New session** creator |
-| `Prefix + Ctrl-j` | **Session switcher** with fzf |
-
-### Copy Mode
-| Key | Action |
-|-----|--------|
-| `Prefix + Enter` | Enter copy mode |
-| `v` | Start selection (in copy mode) |
-| `y` | Copy selection (in copy mode) |
-| `Prefix + p` | Paste |
-
-## Popup Scripts Explained
-
-### Lazygit (`Ctrl-Space + Ctrl-y`)
-Opens lazygit in a popup window for quick git operations without leaving your current context.
-
-### Terminal (`Ctrl-Space + Ctrl-t`)
-Spawns a new bash shell in a popup - perfect for quick commands.
-
-### New Session (`Ctrl-Space + Ctrl-n`)
-Interactive session creator - prompts for session name and creates/switches to it.
-
-### Session Switcher (`Ctrl-Space + Ctrl-j`)
-Uses fzf to provide a fuzzy-searchable list of existing sessions (excludes current session).
-
-## Theme Customization
-
-### Change Catppuccin Flavor
-```bash
-# In ~/.tmux.conf, change:
-set -g @catppuccin_flavour 'mocha'   # dark
-set -g @catppuccin_flavour 'latte'   # light
-set -g @catppuccin_flavour 'frappe'  # medium dark
-set -g @catppuccin_flavour 'macchiato' # medium
-```
-
-### Customize Window Style
-```bash
-# Options: basic, rounded, slanted, custom, none
-set -g @catppuccin_window_status_style "rounded"
-```
-
-## Troubleshooting
-
-### Theme not loading
-1. Ensure catppuccin is installed:
-   ```bash
-   ls ~/.config/tmux/plugins/catppuccin/
-   ```
-
-2. Check tmux version:
-   ```bash
-   tmux -V  # Should be 3.2+
-   ```
-
-3. Force reload:
-   ```bash
-   tmux kill-server
-   tmux
-   ```
-
-### Popup scripts not working
-- **lazygit:** Install with `sudo pacman -S lazygit`
-- **fzf:** Install with `sudo pacman -S fzf`
-- **Bash:** Should be available by default
-
-### Icons not displaying
-Install a Nerd Font and set it in your terminal emulator settings.
-
-## File Structure
-
-```
-~/.tmux.conf                           # Main config file
-~/.tmux/plugins/tpm/                   # Plugin manager
-~/.config/tmux/plugins/catppuccin/     # Theme
-```
-
-## Updating
-
-### Update plugins
-```bash
-# Inside tmux
-Ctrl-Space + U    # Update all plugins
-```
-
-### Update catppuccin manually
-```bash
-cd ~/.config/tmux/plugins/catppuccin
-git pull origin main
-```
-
-## Philosophy
-
-This configuration prioritizes:
-- **Minimal bloat** - only essential features
-- **Popup workflows** - keep context while accessing tools
-- **Vim-style navigation** - consistent with editor habits
-- **Beautiful but functional** - catppuccin theme without performance cost
-
-Perfect for developers who want a clean, efficient tmux setup without unnecessary complexity.
+1.  **Clone the repository:** Clone the repository to your local machine.
+2.  **Tmux Configuration:**
+    * Copy the `.tmux.conf` file to your home directory (`~/.tmux.conf`).
+    * Follow the instructions in the original README to install TPM and the Catppuccin theme.
+3.  **Neovim Configuration:**
+    * Copy the contents of the `nvim` folder to `~/.config/nvim`.
+    * Open Neovim and the `lazy.nvim` plugin manager will automatically bootstrap and install the required plugins.
