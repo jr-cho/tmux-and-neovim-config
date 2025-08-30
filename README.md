@@ -1,95 +1,215 @@
-# Tmux and Neovim Configuration
+# Tmux + Neovim Productivity Setup
 
-A clean, efficient setup for Tmux and Neovim focused on productivity and a beautiful, consistent theme. This repository provides a minimal yet powerful configuration for a terminal-based workflow.
+This guide walks you through configuring **Tmux** and **Neovim** for a productive, visually consistent development environment. The setup is optimized for **Vim-style keybindings**, modern plugins, and the **Catppuccin Mocha theme**.  
+
+It assumes you're using **Homebrew** as your package manager on macOS or Linux.
 
 ---
 
-## Tmux Configuration
+## Table of Contents
+- [Setting Up Tmux](#setting-up-tmux)
+  - [Key Features](#key-features)
+  - [Prerequisites](#prerequisites)
+  - [Installation Steps](#installation-steps)
+  - [Key Bindings](#key-bindings)
+- [Setting Up Neovim](#setting-up-neovim)
+  - [Key Features](#key-features-1)
+  - [Prerequisites](#prerequisites-1)
+  - [Installation Steps](#installation-steps-1)
+  - [Key Bindings](#key-bindings-1)
+- [Troubleshooting](#troubleshooting)
 
-This Tmux configuration is designed for a streamlined workflow with an emphasis on Vim-style keybindings and useful popup scripts.
+---
 
-### Features
+## Setting Up Tmux
 
-* **Custom Prefix:** `Ctrl-Space` is used as the prefix key instead of the default `Ctrl-b`.
-* **Popup Scripts:** Access common tools like `lazygit`, an interactive session switcher using `fzf`, and a new session creator directly from popups.
-* **Vim-style Navigation:** Panes can be navigated using `h`, `j`, `k`, and `l` keys.
-* **Mouse Support:** Mouse support is enabled for easy pane resizing and switching.
-* **Status Bar:** The status bar is moved to the top and displays session information.
-* **Catppuccin Mocha Theme:** A beautiful, dark theme is applied to provide a consistent look across sessions.
-* **Start Index:** Windows and panes are renumbered to start at 1 instead of 0.
+Tmux is a terminal multiplexer that lets you manage multiple terminal sessions efficiently. This configuration focuses on ease of use, intuitive navigation, and integration with tools like **lazygit** and **fzf**.
+
+### Key Features
+- **Custom Prefix Key:** `Ctrl-Space` instead of default `Ctrl-b`
+- **Popup Scripts:** Quick access to lazygit, session switcher, and new session creation
+- **Vim-Style Navigation:** Move between panes using `h`, `j`, `k`, `l`
+- **Mouse Support:** Resize and switch panes using mouse
+- **Custom Status Bar:** Top-positioned, displays session info
+- **Catppuccin Mocha Theme:** Dark, consistent theme
+- **Window & Pane Indexing:** Starts at 1 for intuitive numbering
+
+### Prerequisites
+Install the following dependencies via Homebrew:
+
+```bash
+brew install tmux lazygit fzf
+brew install --cask font-jetbrains-mono-nerd-font
+````
+
+Set up fzf key bindings and completion:
+
+```bash
+$(brew --prefix)/opt/fzf/install
+```
+
+### Installation Steps
+
+1. **Clone the repository**
+
+```bash
+git clone <repository-url> ~/tmux-neovim-config
+```
+
+2. **Copy Tmux configuration**
+
+```bash
+cp ~/tmux-neovim-config/.tmux.conf ~/.tmux.conf
+```
+
+3. **Install Tmux Plugin Manager (TPM)**
+
+```bash
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+```
+
+4. **Install Catppuccin Mocha theme**
+   Follow the [Catppuccin Tmux README](https://github.com/catppuccin/tmux) for installation.
+
+5. **Reload Tmux configuration**
+
+```bash
+tmux source ~/.tmux.conf
+```
+
+Or within Tmux: `Ctrl-Space + r`
+
+### Key Bindings
+
+| Action                 | Shortcut               |
+| ---------------------- | ---------------------- |
+| Prefix Key             | `Ctrl-Space`           |
+| Reload Config          | `Ctrl-Space + r`       |
+| Rename Window          | `Ctrl-Space + Ctrl-r`  |
+| Kill Other Sessions    | `Ctrl-Space + Ctrl-q`  |
+| Navigate Panes         | `Ctrl-Space + h/j/k/l` |
+| Split Panes Horizontal | `Ctrl-Space +`         |
+| Split Panes Vertical   | `Ctrl-Space + -`       |
+| LazyGit Popup          | `Ctrl-Space + Ctrl-y`  |
+| Terminal Popup         | `Ctrl-Space + Ctrl-t`  |
+| New Session            | `Ctrl-Space + Ctrl-n`  |
+| Session Switcher       | `Ctrl-Space + Ctrl-j`  |
+| Enter Copy Mode        | `Ctrl-Space + Enter`   |
+| Select & Copy          | `v` / `y`              |
+
+---
+
+## Setting Up Neovim
+
+Neovim is a modern, extensible text editor. This configuration (in Lua) uses **lazy.nvim** for plugin management and includes tools for coding, debugging, and version control.
+
+### Key Features
+
+* **Core Settings:** Line numbers, consistent tabs/indents, clean UI
+* **Plugin Management:** lazy.nvim for fast startup
+* **Language Support:** `nvim-lspconfig`, `mason.nvim`, `nvim-cmp` (clangd, rust\_analyzer, pyright, lua\_ls)
+* **Syntax Highlighting:** `nvim-treesitter`
+* **Fuzzy Finding:** `telescope.nvim`
+* **Auto-Formatting:** `conform.nvim` on save
+* **Catppuccin Mocha Theme:** Unified with Tmux
+* **Python Integration:** `.venv` support via uv
+* **Session Management:** `persistence.nvim`
+* **Git Integration:** `gitsigns.nvim`
 
 ### Prerequisites
 
-* **tmux 3.2+**
-* **lazygit** (for the git popup)
-* **fzf** (for the session switcher)
-* **A Nerd Font** (for proper icon display)
+Install dependencies via Homebrew:
 
-### Key Bindings
+```bash
+brew install neovim git node python uv rust clang-format ripgrep fd
+```
 
-* **Prefix Key:** `Ctrl-Space`
-* **Reload Config:** `Prefix + r`
-* **Rename Window:** `Prefix + Ctrl-r`
-* **Kill Sessions:** `Prefix + Ctrl-q` kills all other sessions.
-* **Pane Navigation:** `Prefix + h/j/k/l`
-* **Split Panes:**
-    * `Prefix + |` (horizontal)
-    * `Prefix + -` (vertical)
-* **Popup Scripts:**
-    * `Prefix + Ctrl-y`: **Lazygit** popup
-    * `Prefix + Ctrl-t`: **Terminal** popup
-    * `Prefix + Ctrl-n`: **New session** creator
-    * `Prefix + Ctrl-j`: **Session switcher**
-* **Copy Mode:**
-    * `Prefix + Enter`: Enter copy mode
-    * `v`: Begin selection
-    * `y`: Copy selection
-    * `Prefix + p`: Paste
+### Installation Steps
 
----
+1. **Copy Neovim configuration**
 
-## Neovim Configuration
+```bash
+cp -r ~/tmux-neovim-config/nvim ~/.config/nvim
+```
 
-This Neovim setup is configured in Lua, with a focus on a fast startup using `lazy.nvim` and provides a comprehensive suite of plugins for a modern development environment.
+2. **Bootstrap plugins**
+   Open Neovim to automatically install `lazy.nvim` and plugins:
 
-### Features
+```bash
+nvim
+```
 
-* **Core Settings:** Includes settings for line numbers (`number`, `relativenumber`), tabs, indents, and a clean UI.
-* **Lazy Loading:** Uses the `lazy.nvim` plugin manager to ensure a fast startup.
-* **LSP and Autocompletion:** Integrates `nvim-lspconfig`, `mason.nvim`, and `nvim-cmp` for language support, code completion, and snippets. The configuration is set up for `clangd`, `rust_analyzer`, `gopls`, and `lua_ls`.
-* **Treesitter:** Provides advanced syntax highlighting and indentation.
-* **Telescope:** The `telescope.nvim` plugin is configured for fuzzy-finding files and searching with keybindings like `<leader>ff` and `<leader>fg`.
-* **Auto-Formatting:** Uses `conform.nvim` to automatically format code on save.
-* **Catppuccin Mocha Theme:** The editor theme is set to match the Tmux theme for a consistent look and feel.
-* **Keymaps:** Includes custom keymaps for fast escapes (`jk`), buffer navigation (`Shift + h/l`), and a visual indent/outdent (`<`/`>`).
+3. **Install formatters** via mason.nvim
+   Inside Neovim:
 
-### Key Bindings
+```vim
+:MasonInstall black isort clang-format stylua
+```
 
-* **Leader Key:** `Space`
-* **Navigation:**
-    * `Shift + h`: Previous buffer
-    * `Shift + l`: Next buffer
-* **Find/Search:**
-    * `<leader>ff`: Find files
-    * `<leader>fg`: Live grep
-    * `<leader>fb`: Find buffers
-* **LSP:**
-    * `gd`: Go to definition
-    * `gr`: Go to references
-    * `K`: Hover information
-    * `<leader>ca`: Code action
-    * `<leader>rn`: Rename
-* **Formatting:**
-    * `<leader>f`: Format file
+4. **Restart Neovim**
 
 ---
 
-## Installation
+### Key Bindings
 
-1.  **Clone the repository:** Clone the repository to your local machine.
-2.  **Tmux Configuration:**
-    * Copy the `.tmux.conf` file to your home directory (`~/.tmux.conf`).
-    * Follow the instructions in the original README to install TPM and the Catppuccin theme.
-3.  **Neovim Configuration:**
-    * Copy the contents of the `nvim` folder to `~/.config/nvim`.
-    * Open Neovim and the `lazy.nvim` plugin manager will automatically bootstrap and install the required plugins.
+**Leader Key:** `Space`
+
+**Buffer Navigation:**
+
+* `Shift + h/l`: Previous/Next buffer
+* `Ctrl + h/j/k/l`: Move between windows
+* `Ctrl + d/u`: Scroll down/up (centered)
+* `n/N`: Next/Previous search result
+
+**Fuzzy Finding (Telescope):**
+
+* `<leader>ff`: Find files
+* `<leader>fg`: Live grep
+* `<leader>fb`: List open buffers
+* `<leader>fs/fw`: Find document/workspace symbols
+
+**LSP (Language Server Protocol):**
+
+* `gd`: Go to definition
+* `gr`: Go to references
+* `gI`: Go to implementation
+* `gy`: Go to type definition
+* `K`: Hover info
+* `gK`: Signature help
+* `<leader>ca`: Code action
+* `<leader>rn`: Rename symbol
+* `]d/[d`: Next/Previous diagnostic
+* `<leader>q`: Diagnostics in location list
+
+**Formatting:** `<leader>f` (auto-format on save)
+
+**Debugging (DAP):**
+
+* `<leader>db/dc/ds/di/do/du`: Breakpoints, step, UI toggle
+
+**Testing (Neotest):**
+
+* `<leader>tr/tf/ts`: Run tests
+
+**Session Management:**
+
+* `<leader>qs/ql`: Restore session / last session
+
+**Git Integration (gitsigns):**
+
+* `]c/[c`: Next/Previous hunk
+* `<leader>hs/hr/hp`: Stage, reset, preview hunk
+
+**Terminal:**
+
+* `<leader>tt`: Open terminal
+* `<leader>tp`: Open Python REPL via uv
+
+---
+
+## Troubleshooting
+
+* **Tmux icons not displaying:** Ensure Nerd Font installed & configured.
+* **Neovim plugins not loading:** Run `:Lazy` to verify lazy.nvim installation.
+* **LSP servers not working:** Confirm Node.js & language-specific dependencies installed.
+* **Slow startup:** Ensure `ripgrep` and `fd` are installed for telescope.nvim.
