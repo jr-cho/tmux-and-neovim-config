@@ -88,7 +88,7 @@ Or within Tmux: `Ctrl-Space + r`
 | Rename Window          | `Ctrl-Space + Ctrl-r`  |
 | Kill Other Sessions    | `Ctrl-Space + Ctrl-q`  |
 | Navigate Panes         | `Ctrl-Space + h/j/k/l` |
-| Split Panes Horizontal | `Ctrl-Space +`         |
+| Split Panes Horizontal | `Ctrl-Space + \|`      |
 | Split Panes Vertical   | `Ctrl-Space + -`       |
 | LazyGit Popup          | `Ctrl-Space + Ctrl-y`  |
 | Terminal Popup         | `Ctrl-Space + Ctrl-t`  |
