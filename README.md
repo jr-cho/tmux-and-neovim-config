@@ -52,14 +52,10 @@ $(brew --prefix)/opt/fzf/install
 
 1. **Clone the repository**
 
-```bash
-git clone <repository-url> ~/tmux-neovim-config
-```
-
 2. **Copy Tmux configuration**
 
 ```bash
-cp ~/tmux-neovim-config/.tmux.conf ~/.tmux.conf
+cp ~/tmux-and-neovim-config/.tmux.conf ~/.tmux.conf
 ```
 
 3. **Install Tmux Plugin Manager (TPM)**
