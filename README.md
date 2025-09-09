@@ -38,7 +38,7 @@ Tmux is a terminal multiplexer that lets you manage multiple terminal sessions e
 Install the following dependencies via Homebrew:
 
 ```bash
-brew install tmux lazygit fzf
+brew install tmux lazygit fzf lazydocker
 brew install --cask font-jetbrains-mono-nerd-font
 ````
 
@@ -87,6 +87,7 @@ Or within Tmux: `Ctrl-Space + r`
 | Split Panes Horizontal | `Ctrl-Space + \|`      |
 | Split Panes Vertical   | `Ctrl-Space + -`       |
 | LazyGit Popup          | `Ctrl-Space + Ctrl-y`  |
+| LazyDocker Popup       | `Ctrl-Space + Ctrl-d`  |
 | Terminal Popup         | `Ctrl-Space + Ctrl-t`  |
 | New Session            | `Ctrl-Space + Ctrl-n`  |
 | Session Switcher       | `Ctrl-Space + Ctrl-j`  |
