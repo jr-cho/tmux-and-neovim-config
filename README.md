@@ -126,7 +126,7 @@ brew install neovim git node python uv rust clang-format ripgrep fd
 1. **Copy Neovim configuration**
 
 ```bash
-cp -r ~/tmux-neovim-config/nvim ~/.config/nvim
+cp -r ~/tmux-and-neovim-config/nvim ~/.config/nvim
 ```
 
 2. **Bootstrap plugins**
