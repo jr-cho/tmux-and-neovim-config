@@ -98,27 +98,39 @@ Or within Tmux: `Ctrl-Space + r`
 
 ## Setting Up Neovim
 
-Neovim is a modern, extensible text editor. This configuration (in Lua) uses **lazy.nvim** for plugin management and includes tools for coding, debugging, and version control.
+Neovim is a modern, extensible text editor. This configuration (in Lua) uses **lazy.nvim** for plugin management and includes tools for coding and version control.
 
 ### Key Features
 
-* **Core Settings:** Line numbers, consistent tabs/indents, clean UI
+* **Core Settings:** Line numbers, relative numbers, consistent tabs/indents, system clipboard integration
 * **Plugin Management:** lazy.nvim for fast startup
-* **Language Support:** `nvim-lspconfig`, `mason.nvim`, `nvim-cmp` (clangd, rust\_analyzer, pyright, lua\_ls)
+* **Language Support:** Native LSP with `mason.nvim`, `nvim-cmp` (clangd, pyright, lua_ls)
 * **Syntax Highlighting:** `nvim-treesitter`
 * **Fuzzy Finding:** `telescope.nvim`
-* **Auto-Formatting:** `conform.nvim` on save
-* **Catppuccin Mocha Theme:** Unified with Tmux
+* **File Explorer:** `nvim-tree.lua`
+* **Catppuccin Mocha Theme:** Clean, modern colorscheme
 * **Python Integration:** `.venv` support via uv
-* **Session Management:** `persistence.nvim`
-* **Git Integration:** `gitsigns.nvim`
+* **Alpha Dashboard:** Beautiful startup screen
 
 ### Prerequisites
 
 Install dependencies via Homebrew:
 
 ```bash
-brew install neovim git node python uv rust clang-format ripgrep fd
+brew install neovim git python uv clang ripgrep fd
+```
+
+**For Linux clipboard support:**
+
+```bash
+# Ubuntu/Debian
+sudo apt install xclip
+
+# Arch
+sudo pacman -S xclip
+
+# Fedora
+sudo dnf install xclip
 ```
 
 ### Installation Steps
@@ -130,18 +142,22 @@ cp -r ~/tmux-and-neovim-config/nvim ~/.config/nvim
 ```
 
 2. **Bootstrap plugins**
+
    Open Neovim to automatically install `lazy.nvim` and plugins:
 
 ```bash
 nvim
 ```
 
-3. **Install formatters** via mason.nvim
+3. **Install LSP servers** via Mason
+
    Inside Neovim:
 
 ```vim
-:MasonInstall black isort clang-format stylua
+:Mason
 ```
+
+   Then install: `clangd`, `pyright`, `lua_ls`
 
 4. **Restart Neovim**
 
@@ -151,62 +167,48 @@ nvim
 
 **Leader Key:** `Space`
 
-**Buffer Navigation:**
+**File Operations:**
 
-* `Shift + h/l`: Previous/Next buffer
-* `Ctrl + h/j/k/l`: Move between windows
-* `Ctrl + d/u`: Scroll down/up (centered)
-* `n/N`: Next/Previous search result
+* `<leader>w`: Save file
+* `<leader>q`: Quit
+* `<leader>t`: Toggle file tree
 
 **Fuzzy Finding (Telescope):**
 
-* `<leader>ff`: Find files
-* `<leader>fg`: Live grep
-* `<leader>fb`: List open buffers
-* `<leader>fs/fw`: Find document/workspace symbols
+* `<leader>f`: Find files
+* `<leader>g`: Live grep (search in files)
+* `<leader>r`: Recent files
 
 **LSP (Language Server Protocol):**
 
 * `gd`: Go to definition
 * `gr`: Go to references
-* `gI`: Go to implementation
-* `gy`: Go to type definition
-* `K`: Hover info
-* `gK`: Signature help
-* `<leader>ca`: Code action
+* `K`: Hover documentation
 * `<leader>rn`: Rename symbol
-* `]d/[d`: Next/Previous diagnostic
-* `<leader>q`: Diagnostics in location list
+* `<leader>ca`: Code action
+* `[d` / `]d`: Previous/Next diagnostic
+* `<leader>e`: Show diagnostic float
 
-**Formatting:** `<leader>f` (auto-format on save)
+**System Clipboard:**
 
-**Debugging (DAP):**
+* `<leader>y`: Yank to system clipboard (normal/visual mode)
+* `<leader>p`: Paste from system clipboard
+* `<leader>Y`: Yank line to system clipboard
+* `<leader>P`: Paste before cursor from system clipboard
 
-* `<leader>db/dc/ds/di/do/du`: Breakpoints, step, UI toggle
+**Quick Actions:**
 
-**Testing (Neotest):**
-
-* `<leader>tr/tf/ts`: Run tests
-
-**Session Management:**
-
-* `<leader>qs/ql`: Restore session / last session
-
-**Git Integration (gitsigns):**
-
-* `]c/[c`: Next/Previous hunk
-* `<leader>hs/hr/hp`: Stage, reset, preview hunk
-
-**Terminal:**
-
-* `<leader>tt`: Open terminal
-* `<leader>tp`: Open Python REPL via uv
+* `<leader>h`: Clear search highlighting
+* `<F5>`: Compile and run C file (clang)
+* `<F6>`: Run Python file with uv
 
 ---
 
 ## Troubleshooting
 
-* **Tmux icons not displaying:** Ensure Nerd Font installed & configured.
+* **Icons not displaying:** Ensure a Nerd Font is installed & configured in your terminal.
 * **Neovim plugins not loading:** Run `:Lazy` to verify lazy.nvim installation.
-* **LSP servers not working:** Confirm Node.js & language-specific dependencies installed.
-* **Slow startup:** Ensure `ripgrep` and `fd` are installed for telescope.nvim.
+* **LSP servers not working:** Run `:Mason` and install the required language servers.
+* **Clipboard not working on Linux:** Install `xclip` or `xsel`.
+* **Slow fuzzy finding:** Ensure `ripgrep` and `fd` are installed for telescope.nvim.
+* **Python LSP not detecting venv:** Make sure you have a `.venv` directory in your project root created with `uv venv`.
