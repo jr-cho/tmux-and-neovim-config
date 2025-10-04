@@ -11,10 +11,15 @@ vim.o.shiftwidth = 4
 vim.o.expandtab = true
 vim.o.smartindent = true
 vim.o.termguicolors = true
+vim.o.clipboard = "unnamedplus"
+vim.o.ignorecase = true
+vim.o.smartcase = true
+vim.o.undofile = true
+vim.o.swapfile = false
 
 -- Lazy bootstrap
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not vim.loop.fs_stat(lazypath) then
+if not vim.uv.fs_stat(lazypath) then
   vim.fn.system({ "git", "clone", "--filter=blob:none",
     "https://github.com/folke/lazy.nvim.git", "--branch=stable", lazypath })
 end
@@ -24,9 +29,7 @@ require("lazy").setup({
     { "nvim-telescope/telescope.nvim", dependencies = { "nvim-lua/plenary.nvim" } },
     { "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" },
     { "nvim-tree/nvim-tree.lua", dependencies = { "nvim-tree/nvim-web-devicons" } },
-    { "neovim/nvim-lspconfig" },
     { "williamboman/mason.nvim" },
-    { "williamboman/mason-lspconfig.nvim" },
     { "hrsh7th/nvim-cmp" },
     { "hrsh7th/cmp-nvim-lsp" },
     { "hrsh7th/cmp-buffer" },
@@ -126,6 +129,11 @@ map("n", "<leader>e", vim.diagnostic.open_float, opts)
 map("n", "<F5>", ":w<CR>:!clang % -o %< && ./%<<CR>", opts)
 map("n", "<F6>", ":w<CR>:!uv run %<CR>", opts)
 
+map({"n", "v"}, "<leader>y", '"+y', opts)
+map({"n", "v"}, "<leader>p", '"+p', opts)
+map("n", "<leader>Y", '"+Y', opts)
+map("n", "<leader>P", '"+P', opts)
+
 -- Treesitter
 require("nvim-treesitter.configs").setup({
   ensure_installed = { "c", "python", "lua" },
@@ -139,24 +147,37 @@ require("nvim-tree").setup({
 })
 map("n", "<leader>t", ":NvimTreeToggle<CR>", opts)
 
--- Mason & LSP
-local mason = require("mason")
-local mason_lsp = require("mason-lspconfig")
-mason.setup()
-mason_lsp.setup({
-  ensure_installed = { "clangd", "pyright", "lua_ls" },
+-- Mason
+require("mason").setup()
+
+-- LSP (Native Neovim 0.11+)
+vim.lsp.config("*", {
+  capabilities = require("cmp_nvim_lsp").default_capabilities(),
 })
 
-vim.lsp.config.defaults = {
-  capabilities = require("cmp_nvim_lsp").default_capabilities(),
-}
-
-vim.lsp.config.clangd = {
+vim.lsp.config("clangd", {
   cmd = { "clangd", "--background-index", "--clang-tidy" },
   filetypes = { "c", "cpp", "objc", "objcpp" },
-}
-vim.lsp.config.pyright = {}
-vim.lsp.config.lua_ls = {
+})
+
+vim.lsp.config("pyright", {
+  settings = {
+    python = {
+      analysis = {
+        autoSearchPaths = true,
+        typeCheckingMode = "basic",
+      },
+    },
+  },
+  before_init = function(_, config)
+    local uv_venv = vim.fn.getcwd() .. "/.venv/bin/python"
+    if vim.fn.executable(uv_venv) == 1 then
+      config.settings.python.pythonPath = uv_venv
+    end
+  end,
+})
+
+vim.lsp.config("lua_ls", {
   settings = {
     Lua = {
       diagnostics = { globals = { "vim" } },
@@ -164,7 +185,8 @@ vim.lsp.config.lua_ls = {
       telemetry = { enable = false },
     },
   },
-}
+})
+
 vim.lsp.enable({ "clangd", "pyright", "lua_ls" })
 
 -- CMP
