@@ -65,7 +65,24 @@ require("lazy").setup({
     lazy = false,
     opts = {
       bigfile = { enabled = true },
-      dashboard = { enabled = true },
+      dashboard = {
+        enabled = true,
+        preset = {
+          header = [[
+     ██╗███████╗██████╗ ██╗ ██████╗██╗  ██╗ ██████╗ 
+     ██║██╔════╝██╔══██╗██║██╔════╝██║  ██║██╔═══██╗
+     ██║█████╗  ██████╔╝██║██║     ███████║██║   ██║
+██   ██║██╔══╝  ██╔══██╗██║██║     ██╔══██║██║   ██║
+╚█████╔╝███████╗██║  ██║██║╚██████╗██║  ██║╚██████╔╝
+ ╚════╝ ╚══════╝╚═╝  ╚═╝╚═╝ ╚═════╝╚═╝  ╚═╝ ╚═════╝ 
+]],
+        },
+        sections = {
+          { section = "header" },
+          { section = "keys", gap = 1, padding = 1 },
+          { section = "startup" },
+        },
+      },
       indent = { enabled = true },
       input = { enabled = true },
       notifier = { enabled = true },
